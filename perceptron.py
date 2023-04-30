@@ -4,7 +4,6 @@ import time
 import matplotlib.pyplot as plt
 import readdata as rd
 
-
 def training_neural(x_train, y_train, epoch, label):
     features = len(x_train[0])
     weights = np.random.rand(features, label)
@@ -14,24 +13,28 @@ def training_neural(x_train, y_train, epoch, label):
         print("Epoch %d/%d" % (epo + 1, epoch))
         epoch_count.append(epo + 1)
         error = 0
-        for i in range(0, len(x_train)):
-            curr_label = y_train[i]
-            temp_numpy = np.zeros((features))
-            for j in range(0, features):
-                temp_numpy[j] = x_train[i][j]
 
-            dot_product = np.dot(weights.T, temp_numpy)
+        for i in range(0, len(x_train)):
+            current_label = y_train[i]
+            individual_image_pixels = np.zeros((features))
+
+            for j in range(0, features):
+                individual_image_pixels[j] = x_train[i][j]
+
+            dot_product = np.dot(weights.T, individual_image_pixels)
             predicted_label = np.argmax(dot_product)
-            if predicted_label != curr_label:
+
+            if predicted_label != current_label:
                 error = error + 1
-                weights[:, curr_label] = weights[:, curr_label] + temp_numpy[:]
-                weights[:, predicted_label] = weights[:,
-                                                      predicted_label] - temp_numpy[:]
+                weights[:, current_label] = weights[:, current_label] + individual_image_pixels[:]
+                weights[:, predicted_label] = weights[:, predicted_label] - individual_image_pixels[:]
+
         accuracy = 100 - ((error / len(x_train)) * 100)
         accuracy_each_epoch.append(accuracy)
         print("Accuracy: ", accuracy)
         if (accuracy == 100.0):
             break
+
     return weights, epoch_count, accuracy_each_epoch
 
 
@@ -39,14 +42,16 @@ def testing_neural(x_test, y_test, weights_learned):
     features = len(x_test[0])
     error = 0
     for i in range(0, len(x_test)):
-        curr_label = y_test[i]
-        temp_numpy = np.zeros((features, 1))
+        current_label = y_test[i]
+        individual_image_pixels = np.zeros((features, 1))
         for j in range(0, features):
-            temp_numpy[j] = x_test[i][j]
-        dot_product = np.dot(weights_learned.T, temp_numpy)
+            individual_image_pixels[j] = x_test[i][j]
+
+        dot_product = np.dot(weights_learned.T, individual_image_pixels)
         predicted_label = np.argmax(dot_product)
-        if predicted_label != curr_label:
+        if predicted_label != current_label:
             error += 1
+
     return 100 - error/len(y_test)*100
 
 
@@ -69,10 +74,10 @@ def perceptron(training_images_file, training_labels_file, test_images_file, tes
     X_train = rd.matrix_transformation(fetch_data_train, image_height, image_width)
     X_test = rd.matrix_transformation(fetch_data_test, image_height, image_width)
 
-    Y_train_labels = labels = rd.load_label(training_labels_file, training_images)
+    Y_train_labels = rd.load_label(training_labels_file, training_images)
     Y_test_labels = rd.load_label(test_labels_file, test_images)
 
-    tem = 1
+    data_percentange = 1
     accuracy_array = []
     percent_training_amounts = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     total_training_time = 0
@@ -87,14 +92,14 @@ def perceptron(training_images_file, training_labels_file, test_images_file, tes
 
     for i in range(0, 10):
         start = time.time()
-        tem -= 0.10
-        if tem <= 0:
-            tem = 0.001
-        x_train, x_test, y_train, y_test = train_test_split(
-            X_train, Y_train_labels, test_size=tem, random_state=45)
+        data_percentange -= 0.10
+        if data_percentange <= 0:
+            data_percentange = 0.001
+        x_train, placeholder1, y_train, placeholder2 = train_test_split(
+            X_train, Y_train_labels, test_size=data_percentange, random_state=45)
 
-        for i in range(0, len(x_train)):
-            x_train[i] = x_train[i].flatten()
+        for j in range(0, len(x_train)):
+            x_train[j] = x_train[j].flatten()
 
         weights_learned, epoch_count, counter = training_neural(
             x_train, y_train, 150, 10)
@@ -120,10 +125,10 @@ def perceptron(training_images_file, training_labels_file, test_images_file, tes
     print("Total training time: ", total_training_time, " seconds")
     print("Total time taken: ", end1-start1, " seconds")
 
-digits_file_path = "D:/Final Project Intro To AI/data/digitdata/"
+digits_file_path = "./data/digitdata/"
 perceptron(digits_file_path+"trainingimages", digits_file_path+"traininglabels",
            digits_file_path+"testimages", digits_file_path+"testlabels", "Digits")
 
-faces_file_path = "D:/Final Project Intro To AI/data/facedata/facedata"
+faces_file_path = "./data/facedata/facedata"
 perceptron(faces_file_path+"train", faces_file_path+"trainlabels",
            faces_file_path+"test", digits_file_path+"testlabels", "Faces")
