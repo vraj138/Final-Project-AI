@@ -90,11 +90,11 @@ def load_data(source_file, total_images, length, width):
 
     return image_data
 
-def load_label(source_file):
+def load_label(source_file, total_labels):
     label_file = open(source_file)
     label_lines = label_file.readlines()
     labels = []
-    for i in range(len(label_lines)):
+    for i in range(total_labels):
         labels.append(label_lines[i].strip())
     return labels
 

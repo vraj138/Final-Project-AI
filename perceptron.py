@@ -4,7 +4,6 @@ import time
 import matplotlib.pyplot as plt
 import readdata as rd
 
-
 def training_neural(x_train, y_train, epoch, label):
     features = len(x_train[0])
     weights = np.random.rand(features, label)
@@ -69,7 +68,7 @@ def perceptron(training_images_file, training_labels_file, test_images_file, tes
     X_train = rd.matrix_transformation(fetch_data_train, image_height, image_width)
     X_test = rd.matrix_transformation(fetch_data_test, image_height, image_width)
 
-    Y_train_labels = labels = rd.load_label(training_labels_file, training_images)
+    Y_train_labels = rd.load_label(training_labels_file, training_images)
     Y_test_labels = rd.load_label(test_labels_file, test_images)
 
     tem = 1
@@ -120,10 +119,10 @@ def perceptron(training_images_file, training_labels_file, test_images_file, tes
     print("Total training time: ", total_training_time, " seconds")
     print("Total time taken: ", end1-start1, " seconds")
 
-digits_file_path = "D:/Final Project Intro To AI/data/digitdata/"
+digits_file_path = "./data/digitdata/"
 perceptron(digits_file_path+"trainingimages", digits_file_path+"traininglabels",
            digits_file_path+"testimages", digits_file_path+"testlabels", "Digits")
 
-faces_file_path = "D:/Final Project Intro To AI/data/facedata/facedata"
+faces_file_path = "./data/facedata/facedata"
 perceptron(faces_file_path+"train", faces_file_path+"trainlabels",
            faces_file_path+"test", digits_file_path+"testlabels", "Faces")
