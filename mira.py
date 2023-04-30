@@ -7,7 +7,6 @@ import readdata as rd
 def training_neural(x_train,y_train,epoch,label):
     features = len(x_train[0])
     weights = np.random.rand(features, label)
-    # print(np.shape(weights))
     epoch_count = []
     accuracy_each_epoch = []
     for epo in range(0, epoch):
