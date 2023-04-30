@@ -19,12 +19,8 @@ def training_neural(x_train,y_train,epoch,label):
             temp_numpy = np.zeros((features, 1))
             for j in range(0, features):
                 temp_numpy[j] = x_train[i][j]
-            # print(np.shape(temp_numpy))
             dot_product = np.dot(weights.T, temp_numpy)
-            # print(dot_product)
             predicted_label = np.argmax(dot_product)
-            # print(predicted_label)
-            # print(curr_label)
             if predicted_label != curr_label:
                 error = error + 1
                 weight_Diff = (weights[:, predicted_label] - weights[:, curr_label])
@@ -134,8 +130,7 @@ def mira(training_images_file, training_labels_file, test_images_file, test_labe
             if tem < 0:
                 tem = 0.001
             x_train,X_test,y_train,y_test = train_test_split(X_train,Y_train_labels,test_size=tem, random_state=45)
-            # print(len(x_train))
-            label_count = [0] *2 #list of count of labels
+            label_count = [0] *2
             new_x = np.zeros((len(x_train),14, 12))
             feature_list = [0]* len(new_x)
 
