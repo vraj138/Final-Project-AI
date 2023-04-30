@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 def NaiveBayes(pixel_count, prior_prob,test_image, image_count): # 28 rows of an image, pixel count has the number of pixels for each row for each number image (1-9)
-    likelihood = [1] * 10
+    likelihood = [1] * 2
     for j in range(0, len(likelihood)):
         prior_value = prior_prob[j]
         for i in range(0,len(test_image)):
@@ -21,18 +21,18 @@ def NaiveBayes(pixel_count, prior_prob,test_image, image_count): # 28 rows of an
     return likelihood.index(max(likelihood))
     
             
-train_images = "/Users/adityag2602/AIclass/Final-Project-AI/data/digitdata/trainingimages"
-train_labels = "/Users/adityag2602/AIclass/Final-Project-AI/data/digitdata/traininglabels"
-test_images = "/Users/adityag2602/AIclass/Final-Project-AI/data/digitdata/testimages"
-test_labels = "/Users/adityag2602/AIclass/Final-Project-AI/data/digitdata/testlabels"
+train_images = "/Users/adityag2602/AIclass/Final-Project-AI/data/facedata/facedatatrain"
+train_labels = "/Users/adityag2602/AIclass/Final-Project-AI/data/facedata/facedatatrainlabels"
+test_images = "/Users/adityag2602/AIclass/Final-Project-AI/data/facedata/facedatatest"
+test_labels = "/Users/adityag2602/AIclass/Final-Project-AI/data/facedata/facedatatestlabels"
 
 
 
-get_data_train = rd.load_data(train_images, 5000, 28, 28)
-get_data_test = rd.load_data(test_images, 1000, 28, 28)
+get_data_train = rd.load_data(train_images, 451, 70, 60)
+get_data_test = rd.load_data(test_images, 150, 70, 60)
 Y_train_labels = labels = rd.load_label(train_labels)
-X_train = rd.matrix_transformation(get_data_train, 28, 28)
-X_test = rd.matrix_transformation(get_data_test, 28, 28)
+X_train = rd.matrix_transformation(get_data_train, 70, 60)
+X_test = rd.matrix_transformation(get_data_test, 70, 60)
 Y_test_labels = rd.load_label(test_labels)
 
 
@@ -47,10 +47,10 @@ for i in range(0, 10): #Numbers range from 0 to 9
     tem -= 0.10
     if tem < 0:
         tem = 0.0001
-    x_train, x_test, y_train, y_test = train_test_split(X_train, Y_train_labels, test_size=tem, random_state=30)
+    x_train, x_test, y_train, y_test = train_test_split(X_train, Y_train_labels, test_size=tem, random_state=10)
 
     
-    pixel_count = np.zeros((10, 28, 28))
+    pixel_count = np.zeros((10, 70, 60))
     image_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     
     for w in range(0, len(x_train)):
@@ -74,16 +74,16 @@ for i in range(0, 10): #Numbers range from 0 to 9
    #     current_num = image_count[i]
    #     pixel_count[i, :, :] = (pixel_count[i, :, :]) / current_num
 
-    prior = 10 * [0]
-    for i in range(0, 10):
+    prior = 2 * [0]
+    for i in range(0, 2):
         num_of_labels = len(y_train)
         prior[i] = image_count[i] / num_of_labels
 
     end = time.time()
     total_training_time = total_training_time + (end - start)
-    img_di = 28 * [0]
+    img_di = 70 * [0]
     predicted_values = []
-    for w in range(0, 1000): #Number of images in test set is always 1000
+    for w in range(0, 150): #Number of images in test set is always 1000
         count = 0
         it = 0
         for i in X_test[w]:
@@ -102,7 +102,7 @@ for i in range(0, 10): #Numbers range from 0 to 9
    
   
     final_count = 0
-    for i in range(0, 1000): #Number of labels in test will always be 1000
+    for i in range(0, 150): #Number of labels in test will always be 1000
         if int(Y_test_labels[i]) == predicted_values[i]:
             final_count += 1
 

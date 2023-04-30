@@ -24,10 +24,10 @@ def Predictor(pixel_count,prior_prob,test_img):
 # source2 = "D:/project2 AI/facedata/facedatatest"
 # source3 = "D:/project2 AI/facedata/facedatatestlabels"
 
-source_train_images = "/Users/jainipatel/Downloads/data/facedata/facedatatrain"
-source_train_labels = "/Users/jainipatel/Downloads/data/facedata/facedatatrainlabels"
-source_test_images = "/Users/jainipatel/Downloads/data/facedata/facedatatest"
-source_test_labels = "/Users/jainipatel/Downloads/data/facedata/facedatatestlabels"
+source_train_images = "/Users/adityag2602/AIclass/Final-Project-AI/data/facedata/facedatatrain"
+source_train_labels = "/Users/adityag2602/AIclass/Final-Project-AI/data/facedata/facedatatrainlabels"
+source_test_images = "/Users/adityag2602/AIclass/Final-Project-AI/data/facedata/facedatatest"
+source_test_labels = "/Users/adityag2602/AIclass/Final-Project-AI/data/facedata/facedatatestlabels"
 
 
 fetch_data_train = rd.load_data(source_train_images, 451, 70, 60)
