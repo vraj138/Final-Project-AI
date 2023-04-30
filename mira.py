@@ -149,21 +149,23 @@ def mira(training_images_file, training_labels_file, test_images_file, test_labe
                                 new_x[i][n_r][n_c] += x_train[i][row][col]
                 feature_list[i] = new_x[i].flatten()
 
-        y_train = list(map(int,y_train))
-        y_test = list(map(int,y_test))
-        x_train = feature_list
+            y_train = list(map(int,y_train))
+            y_test = list(map(int,y_test))
+            x_train = feature_list
 
-        weights_learned,epoch_count,counter = training_neural(x_train,y_train,170,2)
-        end = time.time()
-        total_training_time += end - start
-        predict = testing_neural(X_feat,Y_labels,weights_learned)
-        accuracy_array.append(predict)
+            weights_learned,epoch_count,counter = training_neural(x_train,y_train,170,2)
+            end = time.time()
+            total_training_time += end - start
+            predict = testing_neural(X_feat,Y_labels,weights_learned)
+            accuracy_array.append(predict)
     
 
     fig, axs = plt.subplots(2)
     axs[0].plot(percent_training,accuracy_array,'-ko', linewidth=1, markersize=3)
     axs[0].set_xlabel("Partition Percentage")
     axs[0].set_ylabel("Accuracy")
+    axs[0].set_title(type)
+
 
     axs[1].plot(epoch_count,counter,'-b')
     axs[1].set_xlabel("Epoch")
@@ -181,4 +183,4 @@ mira(digits_file_path+"trainingimages", digits_file_path+"traininglabels",
 
 faces_file_path = "./data/facedata/facedata"
 mira(faces_file_path+"train", faces_file_path+"trainlabels",
-           faces_file_path+"test", digits_file_path+"testlabels", "Faces")
+           faces_file_path+"test", faces_file_path+"testlabels", "Faces")
