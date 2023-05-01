@@ -109,11 +109,11 @@ def perceptron(training_images_file, training_labels_file, test_images_file, tes
         accuracy_array.append(pre)
 
     fig, axs = plt.subplots(2)
-    plt.title(type)
     axs[0].plot(percent_training_amounts, accuracy_array,
                 '-ko', linewidth=1, markersize=3)
     axs[0].set_xlabel("Partition Percentage")
     axs[0].set_ylabel("Accuracy")
+    axs[0].set_title(type)
 
     axs[1].plot(epoch_count, counter, '-b')
     axs[1].set_xlabel("Epoch")
@@ -131,4 +131,4 @@ perceptron(digits_file_path+"trainingimages", digits_file_path+"traininglabels",
 
 faces_file_path = "./data/facedata/facedata"
 perceptron(faces_file_path+"train", faces_file_path+"trainlabels",
-           faces_file_path+"test", digits_file_path+"testlabels", "Faces")
+           faces_file_path+"test", faces_file_path+"testlabels", "Faces")
