@@ -15,9 +15,8 @@ def training_neural(x_train,y_train,epoch,label):
         error = 0
         for i in range(0, len(x_train)):
             curr_label = y_train[i]
-            temp_numpy = np.zeros((features, 1))
-            for j in range(0, features):
-                temp_numpy[j] = x_train[i][j]
+            temp_numpy = np.zeros((features))
+            temp_numpy[:] = x_train[i][:]
             dot_product = np.dot(weights.T, temp_numpy)
             predicted_label = np.argmax(dot_product)
             if predicted_label != curr_label:
@@ -29,8 +28,8 @@ def training_neural(x_train,y_train,epoch,label):
                 tau_denom = 2 * dotProduct_feature
                 tau = tau_numerator / tau_denom
 
-                weights[:, curr_label] = weights[:, curr_label] + (tau * temp_numpy[:, 0])
-                weights[:, predicted_label] = weights[:, predicted_label] - (tau * temp_numpy[:, 0])
+                weights[:, curr_label] = weights[:, curr_label] + (tau * temp_numpy[:])
+                weights[:, predicted_label] = weights[:, predicted_label] - (tau * temp_numpy[:])
         accuracy = 100 - ((error / len(x_train)) * 100)
         accuracy_each_epoch.append(accuracy)
         print("Accuracy: ", accuracy)
