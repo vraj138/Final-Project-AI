@@ -15,21 +15,21 @@ def training_neural(x_train,y_train,epoch,label):
         error = 0
         for i in range(0, len(x_train)):
             curr_label = y_train[i]
-            temp_numpy = np.zeros((features))
-            temp_numpy[:] = x_train[i][:]
-            dot_product = np.dot(weights.T, temp_numpy)
+            individual_image_pixels = np.zeros((features))
+            individual_image_pixels[:] = x_train[i][:]
+            dot_product = np.dot(weights.T, individual_image_pixels)
             predicted_label = np.argmax(dot_product)
             if predicted_label != curr_label:
                 error = error + 1
                 weight_Diff = (weights[:, predicted_label] - weights[:, curr_label])
-                dotProduct_feature = np.dot(temp_numpy.T, temp_numpy)
+                dotProduct_feature = np.dot(individual_image_pixels.T, individual_image_pixels)
 
-                tau_numerator = np.dot(weight_Diff.T, temp_numpy) + 1
+                tau_numerator = np.dot(weight_Diff.T, individual_image_pixels) + 1
                 tau_denom = 2 * dotProduct_feature
                 tau = tau_numerator / tau_denom
 
-                weights[:, curr_label] = weights[:, curr_label] + (tau * temp_numpy[:])
-                weights[:, predicted_label] = weights[:, predicted_label] - (tau * temp_numpy[:])
+                weights[:, curr_label] = weights[:, curr_label] + (tau * individual_image_pixels[:])
+                weights[:, predicted_label] = weights[:, predicted_label] - (tau * individual_image_pixels[:])
         accuracy = 100 - ((error / len(x_train)) * 100)
         accuracy_each_epoch.append(accuracy)
         print("Accuracy: ", accuracy)
@@ -42,10 +42,10 @@ def testing_neural(x_test,y_test,weights_learned):
     error = 0
     for i in range(0,len(x_test)):
         curr_label = y_test[i]
-        temp_numpy = np.zeros((features,1))
+        individual_image_pixels = np.zeros((features,1))
         for j in range(0,features):
-            temp_numpy[j] = x_test[i][j]
-        dot_product = np.dot(weights_learned.T, temp_numpy)
+            individual_image_pixels[j] = x_test[i][j]
+        dot_product = np.dot(weights_learned.T, individual_image_pixels)
         predicted_label = np.argmax(dot_product)
         if predicted_label != curr_label:
             error +=1
@@ -64,7 +64,7 @@ def mira(training_images_file, training_labels_file, test_images_file, test_labe
         Y_test_labels = rd.load_label(test_labels_file, 1000)
         
         tem = 1
-        accuracy_array = []
+        accuracies = []
         percent_training = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
         total_training_time = 0
         start1 = time.time()
@@ -89,7 +89,7 @@ def mira(training_images_file, training_labels_file, test_images_file, test_labe
             end = time.time()
             total_training_time += end - start
             pre = testing_neural(X_test,Y_test_labels,weights_learned)
-            accuracy_array.append(pre)        
+            accuracies.append(pre)        
         
     elif (type == "Faces"):
         fetch_data_train = rd.load_data(training_images_file, 451, 70, 60)
@@ -103,7 +103,7 @@ def mira(training_images_file, training_labels_file, test_images_file, test_labe
 
 
         tem = 1
-        accuracy_array = []
+        accuracies = []
         percent_training = [10,20,30,40,50,60,70,80,90,100]
         total_training_time = 0
         start1 = time.time()
@@ -150,11 +150,11 @@ def mira(training_images_file, training_labels_file, test_images_file, test_labe
             end = time.time()
             total_training_time += end - start
             predict = testing_neural(X_feat,Y_labels,weights_learned)
-            accuracy_array.append(predict)
+            accuracies.append(predict)
     
 
     fig, axs = plt.subplots(2)
-    axs[0].plot(percent_training,accuracy_array,'-ko', linewidth=1, markersize=3)
+    axs[0].plot(percent_training,accuracies,'-ko', linewidth=1, markersize=3)
     axs[0].set_xlabel("Partition Percentage")
     axs[0].set_ylabel("Accuracy")
     axs[0].set_title(type)
@@ -166,7 +166,7 @@ def mira(training_images_file, training_labels_file, test_images_file, test_labe
     end1 = time.time()
     plt.show()
 
-    print("Testing accuracy_array", accuracy_array)
+    print("Testing accuracies", accuracies)
     print("Total training time: ",total_training_time," seconds")
     print("Total time taken: ",end1-start1," seconds")
     

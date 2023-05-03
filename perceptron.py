@@ -57,12 +57,14 @@ def testing_neural(x_test, y_test, weights_learned):
 def perceptron(training_images_file, training_labels_file, test_images_file, test_labels_file, type):
 
     if (type == "Digits"):
+        classes = 10
         image_height = 28
         image_width = 28
         training_images = 5000
         test_images = 1000
 
     elif (type == "Faces"):
+        classes = 2
         image_height = 70
         image_width = 60
         training_images = 451
@@ -77,7 +79,7 @@ def perceptron(training_images_file, training_labels_file, test_images_file, tes
     Y_test_labels = rd.load_label(test_labels_file, test_images)
 
     data_percentange = 1
-    accuracy_array = []
+    accuracies = []
     percent_training_amounts = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     total_training_time = 0
     start1 = time.time()
@@ -101,14 +103,14 @@ def perceptron(training_images_file, training_labels_file, test_images_file, tes
             x_train[j] = x_train[j].flatten()
 
         weights_learned, epoch_count, counter = training_neural(
-            x_train, y_train, 150, 10)
+            x_train, y_train, 150, classes)
         end = time.time()
         total_training_time += end - start
         pre = testing_neural(X_test, Y_test_labels, weights_learned)
-        accuracy_array.append(pre)
+        accuracies.append(pre)
 
     fig, axs = plt.subplots(2)
-    axs[0].plot(percent_training_amounts, accuracy_array,
+    axs[0].plot(percent_training_amounts, accuracies,
                 '-ko', linewidth=1, markersize=3)
     axs[0].set_xlabel("Partition Percentage")
     axs[0].set_ylabel("Accuracy")
@@ -120,7 +122,7 @@ def perceptron(training_images_file, training_labels_file, test_images_file, tes
     end1 = time.time()
     plt.show()
 
-    print("Testing accuracy_array", accuracy_array)
+    print("Testing accuracies", accuracies)
     print("Total training time: ", total_training_time, " seconds")
     print("Total time taken: ", end1-start1, " seconds")
 
