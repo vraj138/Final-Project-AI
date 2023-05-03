@@ -18,8 +18,7 @@ def training_neural(x_train, y_train, epoch, label):
             current_label = y_train[i]
             individual_image_pixels = np.zeros((features))
 
-            for j in range(0, features):
-                individual_image_pixels[j] = x_train[i][j]
+            individual_image_pixels[:] = x_train[i][:]
 
             dot_product = np.dot(weights.T, individual_image_pixels)
             predicted_label = np.argmax(dot_product)
