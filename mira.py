@@ -7,7 +7,6 @@ import readdata as rd
 def training_neural(x_train,y_train,epoch,label):
     features = len(x_train[0])
     weights = np.random.rand(features, label)
-    # print(np.shape(weights))
     epoch_count = []
     accuracy_each_epoch = []
     for epo in range(0, epoch):
@@ -19,12 +18,8 @@ def training_neural(x_train,y_train,epoch,label):
             temp_numpy = np.zeros((features, 1))
             for j in range(0, features):
                 temp_numpy[j] = x_train[i][j]
-            # print(np.shape(temp_numpy))
             dot_product = np.dot(weights.T, temp_numpy)
-            # print(dot_product)
             predicted_label = np.argmax(dot_product)
-            # print(predicted_label)
-            # print(curr_label)
             if predicted_label != curr_label:
                 error = error + 1
                 weight_Diff = (weights[:, predicted_label] - weights[:, curr_label])
@@ -149,18 +144,20 @@ def mira(training_images_file, training_labels_file, test_images_file, test_labe
                                 new_x[i][n_r][n_c] += x_train[i][row][col]
                 feature_list[i] = new_x[i].flatten()
 
-        y_train = list(map(int,y_train))
-        y_test = list(map(int,y_test))
-        x_train = feature_list
+            y_train = list(map(int,y_train))
+            y_test = list(map(int,y_test))
+            x_train = feature_list
 
-        weights_learned,epoch_count,counter = training_neural(x_train,y_train,170,2)
-        end = time.time()
-        total_training_time += end - start
-        predict = testing_neural(X_feat,Y_labels,weights_learned)
-        accuracy_array.append(predict)
+            weights_learned,epoch_count,counter = training_neural(x_train,y_train,170,2)
+            end = time.time()
+            total_training_time += end - start
+            predict = testing_neural(X_feat,Y_labels,weights_learned)
+            accuracy_array.append(predict)
     
 
     fig, axs = plt.subplots(2)
+    plt.title(type)
+    plt.subplots_adjust(bttom =5, top =5)
     axs[0].plot(percent_training,accuracy_array,'-ko', linewidth=1, markersize=3)
     axs[0].set_xlabel("Partition Percentage")
     axs[0].set_ylabel("Accuracy")
@@ -181,4 +178,4 @@ mira(digits_file_path+"trainingimages", digits_file_path+"traininglabels",
 
 faces_file_path = "./data/facedata/facedata"
 mira(faces_file_path+"train", faces_file_path+"trainlabels",
-           faces_file_path+"test", digits_file_path+"testlabels", "Faces")
+           faces_file_path+"test", faces_file_path+"testlabels", "Faces")
