@@ -18,8 +18,7 @@ def training_neural(x_train, y_train, epoch, label):
             current_label = y_train[i]
             individual_image_pixels = np.zeros((features))
 
-            for j in range(0, features):
-                individual_image_pixels[j] = x_train[i][j]
+            individual_image_pixels[:] = x_train[i][:]
 
             dot_product = np.dot(weights.T, individual_image_pixels)
             predicted_label = np.argmax(dot_product)
@@ -109,12 +108,11 @@ def perceptron(training_images_file, training_labels_file, test_images_file, tes
         accuracy_array.append(pre)
 
     fig, axs = plt.subplots(2)
-    plt.set_title(type)
-    plt.subplots_adjust(bttom =5, top =5)
     axs[0].plot(percent_training_amounts, accuracy_array,
                 '-ko', linewidth=1, markersize=3)
     axs[0].set_xlabel("Partition Percentage")
     axs[0].set_ylabel("Accuracy")
+    axs[0].set_title(type)
 
     axs[1].plot(epoch_count, counter, '-b')
     axs[1].set_xlabel("Epoch")

@@ -15,9 +15,8 @@ def training_neural(x_train,y_train,epoch,label):
         error = 0
         for i in range(0, len(x_train)):
             curr_label = y_train[i]
-            temp_numpy = np.zeros((features, 1))
-            for j in range(0, features):
-                temp_numpy[j] = x_train[i][j]
+            temp_numpy = np.zeros((features))
+            temp_numpy[:] = x_train[i][:]
             dot_product = np.dot(weights.T, temp_numpy)
             predicted_label = np.argmax(dot_product)
             if predicted_label != curr_label:
@@ -29,8 +28,8 @@ def training_neural(x_train,y_train,epoch,label):
                 tau_denom = 2 * dotProduct_feature
                 tau = tau_numerator / tau_denom
 
-                weights[:, curr_label] = weights[:, curr_label] + (tau * temp_numpy[:, 0])
-                weights[:, predicted_label] = weights[:, predicted_label] - (tau * temp_numpy[:, 0])
+                weights[:, curr_label] = weights[:, curr_label] + (tau * temp_numpy[:])
+                weights[:, predicted_label] = weights[:, predicted_label] - (tau * temp_numpy[:])
         accuracy = 100 - ((error / len(x_train)) * 100)
         accuracy_each_epoch.append(accuracy)
         print("Accuracy: ", accuracy)
@@ -129,8 +128,7 @@ def mira(training_images_file, training_labels_file, test_images_file, test_labe
             if tem < 0:
                 tem = 0.001
             x_train,X_test,y_train,y_test = train_test_split(X_train,Y_train_labels,test_size=tem, random_state=45)
-            # print(len(x_train))
-            label_count = [0] *2 #list of count of labels
+            label_count = [0] *2
             new_x = np.zeros((len(x_train),14, 12))
             feature_list = [0]* len(new_x)
 
@@ -156,11 +154,11 @@ def mira(training_images_file, training_labels_file, test_images_file, test_labe
     
 
     fig, axs = plt.subplots(2)
-    plt.title(type)
-    plt.subplots_adjust(bttom =5, top =5)
     axs[0].plot(percent_training,accuracy_array,'-ko', linewidth=1, markersize=3)
     axs[0].set_xlabel("Partition Percentage")
     axs[0].set_ylabel("Accuracy")
+    axs[0].set_title(type)
+
 
     axs[1].plot(epoch_count,counter,'-b')
     axs[1].set_xlabel("Epoch")
