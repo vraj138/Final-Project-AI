@@ -118,7 +118,7 @@ def perceptron(training_images_file, training_labels_file, test_images_file, tes
 
     fig, axs = plt.subplots(2)
     plt.title(type)
-    axs[0].plot(percent_training_amounts, accuracy_array,
+    axs[0].plot(percent_training_amounts, accuracies,
                 '-ko', linewidth=1, markersize=3)
     axs[0].set_xlabel("Partition Percentage")
     axs[0].set_ylabel("Accuracy")
